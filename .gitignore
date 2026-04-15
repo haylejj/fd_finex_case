@@ -1,0 +1,19 @@
+# Build outputs
+bin/
+obj/
+dist/
+
+# Frontend dependencies
+node_modules/
+
+# IDE/editor
+.vs/
+.vscode/
+
+# Local temp folders
+.tmp_build_webapi/
+.tmp_test_output/
+
+# OS files
+.DS_Store
+Thumbs.db
