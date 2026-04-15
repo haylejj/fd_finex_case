@@ -4,12 +4,12 @@ Bu proje, gorev (todo) olusturma, listeleme, guncelleme ve silme islemlerini yap
 
 ## Teknoloji Tercihleri ve Kisa Gerekceler
 
-- **.NET 8 Web API**: .Net 8 sürümü uzum kapsamlı destek aldığı için seçildi..
+- **.NET 8 Web API**: .Net 8 sürümü uzum kapsamlı destek aldığı için seçildi.
 - **Katmanli Mimari (API, Application, Domain, Infrastructure)**: Sorumluluklari ayirmak, test edilebilirligi ve bakimi kolaylastirmak icin kullanildi.
 - **Entity Framework Core + SQL Server**: Veritabani islemlerini tip guvenli ve hizli yonetmek icin tercih edildi.
 - **FluentValidation**: Request dogrulamalarini merkezi, okunabilir ve yeniden kullanilabilir yapmak icin secildi.
 - **AutoMapper**: DTO-Entity donusumlerini sade ve tekrarsiz hale getirmek icin kullanildi.
-- **Frontend: React (tercih)**: Bilesen tabanli, hizli ve yaygin oldugu icin arayuz tarafinda tercih edildi.
+- **Frontend: React**: Bilesen tabanli, hizli ve yaygin oldugu icin arayuz tarafinda tercih edildi.
 
 ## Proje Yapisi
 
