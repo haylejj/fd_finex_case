@@ -40,6 +40,23 @@ public class TodosControllerTests
         Assert.Single(result.Data!);
     }
 
+    // Amaç: Servis katmaný baþarýsýz döndüðünde GetAll endpoint'inin gelen status ve hatayý aynen yansýttýðýný doðrulamak.
+    [Fact]
+    public async Task GetAll_ReturnsServiceFailureResult_WhenServiceFails()
+    {
+        _todoServiceMock
+            .Setup(x => x.GetAllAsync())
+            .ReturnsAsync(ServiceResult<List<TodoItemDto>>.Failure("Listeleme hatasi.", HttpStatusCode.BadRequest));
+
+        var actionResult = await _controller.GetAll();
+        var objectResult = Assert.IsType<ObjectResult>(actionResult);
+        var result = Assert.IsType<ServiceResult<List<TodoItemDto>>>(objectResult.Value);
+
+        Assert.Equal((int)HttpStatusCode.BadRequest, objectResult.StatusCode);
+        Assert.False(result.IsSuccess);
+        Assert.Contains("Listeleme hatasi.", result.ErrorList!);
+    }
+
     // Amaç: Kayıt bulunamadığında GetById endpoint'inin 404 ve hata mesajı dönmesini doğrulamak.
     [Fact]
     public async Task GetById_ReturnsNotFoundServiceResult_WhenItemMissing()
@@ -81,6 +98,26 @@ public class TodosControllerTests
         Assert.Equal((int)HttpStatusCode.Created, objectResult.StatusCode);
         Assert.True(result.IsSuccess);
         Assert.Equal(10, result.Data!.Id);
+        Assert.Equal("/api/todos/10", result.UrlAsCreated);
+    }
+
+    // Amaç: Create endpoint'inde validasyon/kurala baðlý hata durumunda 400 ve hata mesajýnýn döndüðünü doðrulamak.
+    [Fact]
+    public async Task Create_ReturnsBadRequestServiceResult_WhenRequestInvalid()
+    {
+        var request = new CreateTodoRequest { Title = "" };
+
+        _todoServiceMock
+            .Setup(x => x.CreateAsync(request))
+            .ReturnsAsync(ServiceResult<TodoItemDto>.Failure("Baslik alani zorunludur.", HttpStatusCode.BadRequest));
+
+        var actionResult = await _controller.Create(request);
+        var objectResult = Assert.IsType<ObjectResult>(actionResult);
+        var result = Assert.IsType<ServiceResult<TodoItemDto>>(objectResult.Value);
+
+        Assert.Equal((int)HttpStatusCode.BadRequest, objectResult.StatusCode);
+        Assert.False(result.IsSuccess);
+        Assert.Contains("Baslik alani zorunludur.", result.ErrorList!);
     }
 
     // Amaç: Update endpoint'inin geçerli istekte 200 dönüp güncel veriyi taşıdığını doğrulamak.
@@ -129,5 +166,22 @@ public class TodosControllerTests
 
         Assert.Equal((int)HttpStatusCode.NoContent, objectResult.StatusCode);
         Assert.True(result.IsSuccess);
+    }
+
+    // Amaç: Silinecek kayýt bulunamadýðýnda Delete endpoint'inin 404 ve hata mesajý dönmesini doðrulamak.
+    [Fact]
+    public async Task Delete_ReturnsNotFoundServiceResult_WhenItemMissing()
+    {
+        _todoServiceMock
+            .Setup(x => x.DeleteAsync(999))
+            .ReturnsAsync(ServiceResult.Failure("Todo kaydi bulunamadi.", HttpStatusCode.NotFound));
+
+        var actionResult = await _controller.Delete(999);
+        var objectResult = Assert.IsType<ObjectResult>(actionResult);
+        var result = Assert.IsType<ServiceResult>(objectResult.Value);
+
+        Assert.Equal((int)HttpStatusCode.NotFound, objectResult.StatusCode);
+        Assert.False(result.IsSuccess);
+        Assert.Contains("Todo kaydi bulunamadi.", result.ErrorList!);
     }
 }
