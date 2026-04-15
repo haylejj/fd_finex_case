@@ -13,10 +13,25 @@ Bu proje, gorev (todo) olusturma, listeleme, guncelleme ve silme islemlerini yap
 
 ## Proje Yapisi
 
+- `Frontend`: React (Vite) arayuzu
 - `WEBAPI`: API katmani (controller, middleware, Program)
 - `WEBAPI.Application`: DTO, service contract, validation, mapping
 - `WEBAPI.Domain`: Entity modelleri
 - `WEBAPI.Infrastructure`: EF Core DbContext, service implementasyonlari
+- `WEBAPI.Tests`: API testleri
+
+### Frontend Klasor Yapisi (`Frontend/src`)
+
+- `App.tsx`: Sayfa seviyesinde state yonetimi ve API aksiyonlari
+- `components/`: Arayuzun parcalanmis bilesenleri
+  - `TodoListPanel.tsx`: Sol panel, gorev listesi
+  - `TodoActionsPanel.tsx`: Sag panel, secili gorev ve aksiyonlar
+  - `TodoModal.tsx`: Ekle/Guncelle/Sil/Toggle modal icerigi
+  - `NoticeToast.tsx`: Ust sag bildirim alani
+- `types/todo.ts`: Ortak TypeScript tipleri
+- `utils/apiError.ts`: API hata mesaji ayrıştırma yardimcisi
+- `utils/date.ts`: Tarih formatlama yardimcisi
+- `style.css`: Uygulama stilleri
 
 ## Backend Kurulum ve Calistirma
 
@@ -67,6 +82,51 @@ dotnet run --project WEBAPI
 ```
 
 Swagger uzerinden endpointler test edilebilir.
+
+## Frontend Kurulum ve Calistirma (React)
+
+### 1) Gereksinimler
+
+- Node.js 18+ (onerilen: LTS)
+- npm
+
+### 2) Frontend bagimliliklarini kurma
+
+Proje kokunden:
+
+```bash
+cd Frontend
+npm install
+```
+
+### 3) Gelistirme modunda calistirma
+
+```bash
+npm run dev
+```
+
+Varsayilan olarak uygulama `http://localhost:5173` adresinde acilir.
+
+### 4) Production build alma
+
+```bash
+npm run build
+```
+
+### 5) Build'i local onizleme
+
+```bash
+npm run preview
+```
+
+## Uygulamayi Uctan Uca Calistirma
+
+1. `WEBAPI` tarafini baslatin:
+   - `dotnet run --project WEBAPI`
+2. Ayrı bir terminalde `Frontend` tarafini baslatin:
+   - `cd Frontend`
+   - `npm run dev`
+3. Tarayicidan `http://localhost:5173` adresine gidin.
 
 ## Notlar
 
